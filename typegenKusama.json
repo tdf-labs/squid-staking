@@ -1,0 +1,16 @@
+{
+  "outDir": "./src/types/kusama",
+  "specVersions": "https://kusama.archive.subsquid.io/graphql",
+  "typesBundle": "kusama",
+  "events": [
+    "Staking.Bonded",
+    "Staking.Unbonded",
+    "Staking.Chilled",
+    "Staking.Kicked",
+    "Staking.PayoutStarted",
+    "Staking.Rewarded",
+    "Staking.Slashed",
+    "Staking.Withdrawn"
+  ],
+  "calls": ["Staking.nominate"]
+}
