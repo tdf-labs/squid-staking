@@ -7,22 +7,19 @@ FROM node-with-gyp AS builder
 WORKDIR /squid
 ADD package.json .
 ADD package-lock.json .
-RUN npm ci
-ADD tsconfig.json .
-ADD src
 ADD schema.graphql .
 ADD Makefile .
-RUN make codegen
-ADD typegenKusama.json .
-ADD typegenPolkadot.json .
-RUN make typegen
+ADD typegen typegen
+RUN npm ci
+ADD tsconfig.json .
+ADD src src
 RUN npm run build
 
 FROM node-with-gyp AS deps
 WORKDIR /squid
 ADD package.json .
 ADD package-lock.json .
-RUN npm ci --production
+RUN npm ci --production --ignore-scripts
 
 FROM node AS squid
 WORKDIR /squid
