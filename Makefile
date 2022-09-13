@@ -19,9 +19,9 @@ codegen:
 
 
 typegen-kusama:
-	@npx --yes @subsquid/squid-substrate-typegen typegenKusama.json
+	@npx --yes squid-substrate-typegen typegenKusama.json
 typegen-polkadot:
-	@npx --yes @subsquid/squid-substrate-typegen typegenPolkadot.json
+	@npx --yes squid-substrate-typegen typegenPolkadot.json
 
 typegen: typegen-kusama typegen-polkadot
 
