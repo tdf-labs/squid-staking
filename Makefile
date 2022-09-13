@@ -15,13 +15,13 @@ migrate:
 
 
 codegen:
-	@npx squid-typeorm-codegen
+	@npx --yes @subsquid/typeorm-codegen
 
 
 typegen-kusama:
-	@npx --yes squid-substrate-typegen typegenKusama.json
+	@npx --yes @subsquid/substrate-typegen typegenKusama.json
 typegen-polkadot:
-	@npx --yes squid-substrate-typegen typegenPolkadot.json
+	@npx --yes @subsquid/substrate-typegen typegenPolkadot.json
 
 typegen: typegen-kusama typegen-polkadot
 
@@ -31,7 +31,7 @@ up:
 down:
 	@docker-compose down
 
-deploy: codegen typegen-$(network)
+deploy:
 	@API_DEBUG=true npx sqd squid update staking-$(network)@$(version) --source github.com/tdf-labs/squid-staking.git#main -v -e NETWORK=$(network)
 
 .PHONY: build serve process migrate codegen typegen up down
