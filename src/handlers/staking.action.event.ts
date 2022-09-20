@@ -1,17 +1,18 @@
 import { decodeHex, EventHandlerContext } from '@subsquid/substrate-processor';
+import { Store } from '@subsquid/typeorm-store';
 import {
   SubstrateNetwork,
   SubstrateStakingActionHistory,
   SubstrateStakingActionType,
   SubstrateStakingNominatorAccount,
   SubstrateStakingStashAccount,
-  SubstrateStakingValidatorAccount,
+  SubstrateStakingValidatorAccount
 } from '../model';
 import {
   decodeAddress,
   encodeAddress,
   getOrCreate,
-  getRegistry,
+  getRegistry
 } from '../utils';
 import { getStakingBondedEvent } from './typeGetters/getStakingBondedEvent';
 import { getStakingChilledEvent } from './typeGetters/getStakingChilledEvent';
@@ -21,8 +22,6 @@ import { getStakingRewardedEvent } from './typeGetters/getStakingRewardedEvent';
 import { getStakingSlashedEvent } from './typeGetters/getStakingSlashedEvent';
 import { getStakingUnbondedEvent } from './typeGetters/getStakingUnbondedEvent';
 import { getStakingWithdrawnEvent } from './typeGetters/getStakingWithdrawnEvent';
-import { Store } from '@subsquid/typeorm-store';
-import assert from 'assert';
 
 export default (
     network: SubstrateNetwork,
@@ -52,7 +51,12 @@ export default (
 
         if (ctx.event.extrinsic) {
           const callerId = getOriginAccountId(ctx.event.call.origin, network);
-          assert(callerId, `Can't decode caller`);
+
+          if (!callerId) {
+            ctx.log.warn(`StakingActionEvent::bonded event does not have a signer. Block number: ${blockNumber}`);
+            return;
+          }
+
           data.nominator = await getOrCreateNominator(
             ctx,
             callerId,
@@ -75,7 +79,12 @@ export default (
 
         if (ctx.event.extrinsic) {
           const callerId = getOriginAccountId(ctx.event.call.origin, network);
-          assert(callerId, `Can't decode caller`);
+
+          if (!callerId) {
+            ctx.log.warn(`StakingActionEvent::unbonded event does not have a signer. Block number: ${blockNumber}`);
+            return;
+          }
+
           data.nominator = await getOrCreateNominator(
             ctx,
             callerId,
